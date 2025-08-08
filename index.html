@@ -25,8 +25,8 @@
 </head>
 <body>
   <script>
-    // ===== Simple password gate (change the PASSWORD below) =====
-    const PASSWORD = 'ily'; 
+    // Password gate
+    const PASSWORD = 'ily';
     const entered = prompt('Enter password:');
     if (entered !== PASSWORD) {
       document.write('<h1 style="font-family:system-ui; color:#e5e7eb; text-align:center; margin-top:20vh;">Access denied</h1>');
@@ -45,46 +45,58 @@
         <button id="nextBtn">Another one</button>
         <button id="copyBtn">Copy quote</button>
       </div>
-      <p class="small">By default you get 1 cat + quote per day. You can tap the button for more.</p>
+      <p class="small">By default you get 1 cat + quote per day. Tap the button for more.</p>
     </div>
   </div>
 
   <script>
-    // ===== IMAGES =====
-    const IMAGE_COUNT = 68; 
-    const images = Array.from({length: IMAGE_COUNT}, (_, i) => `assets/cat${i+1}.jpeg`);
+    // ==== IMAGES (mixed .jpg / .jpeg support) ====
+    const IMAGE_COUNT = 68;
+    const imageBases = Array.from({length: IMAGE_COUNT}, (_, i) => `assets/cat${i+1}`);
 
-    // ===== QUOTES (50 short + 15 long) =====
+    function setImgWithFallback(base){
+      const imgEl = document.getElementById('catImg');
+      // try .jpg first, then .jpeg
+      imgEl.onerror = null;
+      imgEl.src = base + '.jpg';
+      imgEl.onerror = () => {
+        imgEl.onerror = null;
+        imgEl.src = base + '.jpeg';
+      };
+    }
+
+    // ==== QUOTES (50 short + 15 long) ====
     const quotes = [
       'You are my favorite part of every day.', 'I’m so lucky the universe made you.', 'You feel like home.', 'Every sunrise is better with you in my world.', 'You’re my today and all of my tomorrows.', 'My heart smiles whenever you do.', 'I like you more than coffee… and that’s saying a lot.', 'You make my soul feel sunny.', 'I never get tired of your smile.', 'You’re my favorite hello and my hardest goodbye.', 'Today is a fresh start — make it sparkle.', 'You’re stronger than you think.', 'Keep going, you’re doing amazing.', 'Small steps every day lead to big changes.', 'The sun will rise, and so will you.', 'Your energy is magnetic.', 'Good things are coming — trust the process.', 'You’ve got this, no matter what.', 'Progress, not perfection.', 'Stay soft, but stand strong.', 'You + me + cats = perfect equation.', 'I’m pawsitive you’re awesome.', 'Life’s better with whiskers and you.', 'Stay pawsitive, human.', 'You’re the cat’s meow.', 'Coffee first, conquering the world second.', 'You’re purrfect, and that’s a fact.', 'If you were a cat, I’d still choose you.', 'I knead you in my life.', 'You’re the treat at the end of my day.', 'Be the reason someone believes in kindness.', 'Even the moon needs the dark to shine.', 'You’re allowed to rest and still be worthy.', 'Let go of what you can’t control.', 'You are the art in someone’s gallery.', 'Make yourself proud today.', 'Chase dreams, not deadlines.', 'The best time for new beginnings is now.', 'You’re exactly where you’re meant to be.', 'Your light is never too much.', 'Drink water, eat cake, call me.', 'You make ordinary days magical.', 'Don’t forget to breathe and smile.', 'You’re my favorite notification.', 'You make everything feel lighter.', 'A day without you is like a day without cats — impossible.', 'You’re the plot twist I didn’t know I needed.', 'Keep your heart open, magic is on the way.', 'You’re proof that good people exist.', 'I’m proud of you, always.',
       'No matter how slow you go, you are still lapping everyone who stays on the couch. Keep showing up for yourself.', 'Every single day is a blank page. Write something worth reading, even if it’s just a small act of kindness.', 'You survived the days you thought you couldn’t. You’re stronger than every storm you’ve been through.', 'Sometimes, the bravest thing you can do is rest, heal, and try again tomorrow.', 'You are not behind in life. You are exactly where your path needs you to be, even if it doesn’t look like anyone else’s.', 'Small joys matter — the smell of coffee, the sound of laughter, the warmth of someone who loves you.', 'Every challenge you face is shaping you into the person you’ve always wanted to become.', 'Your worth is not measured by productivity. You are enough simply by existing.', 'One day, you’ll look back and realize that all the little steps were actually the big ones.', 'Be gentle with yourself. Growth is messy, healing is not linear, and love takes time.', 'The world is better because you are in it — your light reaches further than you know.', 'Don’t rush the process. Good things take time, and you’re building something beautiful.', 'Your dreams are valid, even if they scare you. Especially if they scare you.', 'Remember: the same sun that melts ice hardens clay. How you respond is up to you.', 'There is no such thing as “too late.” The next chapter can start right now.'
     ];
 
-    // ===== helpers =====
+    // ==== helpers ====
     function hashStr(str){ let h=2166136261>>>0; for(let i=0;i<str.length;i++){ h^=str.charCodeAt(i); h=Math.imul(h,16777619);} return h>>>0; }
     function pickForToday(list, salt){ const now=new Date(); const key=`${now.getFullYear()}-${now.getMonth()+1}-${now.getDate()}|${salt}`; const h=hashStr(key); return list[h%list.length]; }
 
     function setToday(){
       const now = new Date();
-      // Berlin time for greetings
-      const hourString = new Intl.DateTimeFormat('en-GB', { timeZone: 'Europe/Berlin', hour: 'numeric', hour12: false }).format(now);
-      const hour = parseInt(hourString, 10);
-
+      // Berlin time greeting windows
+      const hour = parseInt(new Intl.DateTimeFormat('en-GB', { timeZone: 'Europe/Berlin', hour: 'numeric', hour12: false }).format(now), 10);
       let greetText = '';
-      if (hour < 12) greetText = 'Good morning sunshine 🌞✨';
+      if (hour < 12) greetText = 'Good morning ✨';
       else if (hour >= 18 && hour < 22) greetText = 'Good evening ✨';
-      else if (hour >= 22 || hour < 4) greetText = 'Good night✨';
-      // else keep empty (no greeting midday)
+      else if (hour >= 22 || hour < 4) greetText = 'Good night ✨';
       document.getElementById('greet').textContent = greetText;
 
-      document.getElementById('catImg').src = pickForToday(images, 'img');
+      // Set image with fallback
+      const todayBase = pickForToday(imageBases, 'img');
+      setImgWithFallback(todayBase);
+
+      // Quote
       document.getElementById('quote').textContent = pickForToday(quotes, 'quote');
       document.getElementById('dateBadge').textContent = now.toLocaleDateString('en-US', {weekday:'long', year:'numeric', month:'long', day:'numeric'});
 
       // Confetti on Aug 9 (Berlin time)
       const dm = new Intl.DateTimeFormat('en-GB', { timeZone: 'Europe/Berlin', day: 'numeric', month: 'numeric' }).format(now); // e.g., '9/8'
       if (dm === '9/8') {
-        const duration = 2000; // 2s rain
+        const duration = 2000;
         const end = Date.now() + duration;
         (function frame(){
           confetti({ particleCount: 8, spread: 70, origin: { y: 0.6 } });
@@ -101,7 +113,7 @@
 
     function randomItem(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
     document.getElementById('nextBtn').addEventListener('click', ()=>{
-      document.getElementById('catImg').src = randomItem(images);
+      setImgWithFallback(randomItem(imageBases));
       document.getElementById('quote').textContent = randomItem(quotes);
     });
 
