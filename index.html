@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Daily Cat + Quote</title>
   <style>
-    :root{--bg:#0f172a;--card:#111827cc;--text:#e5e7eb;--muted:#9ca3af}
+    :root{--bg:#000000;--card:#111827cc;--text:#e5e7eb;--muted:#9ca3af}
     html,body{height:100%}
     body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;display:grid;place-items:center;background:var(--bg);color:var(--text);padding:24px}
     .card{background:var(--card);border:1px solid #1f2937;border-radius:16px;max-width:560px;width:100%;box-shadow:0 10px 30px #0006;overflow:hidden;position:relative}
@@ -19,7 +19,20 @@
     button{appearance:none;border:1px solid #374151;background:#0b1220;color:var(--text);padding:8px 12px;border-radius:10px;cursor:pointer;font-weight:600}
     button:hover{border-color:#4b5563}
     .small{font-size:.85rem;color:var(--muted)}
-    .love-badge{position:fixed;left:12px;top:12px;background:#0b1220cc;border:1px solid #374151;color:#e5e7eb;padding:6px 10px;border-radius:999px;font-size:.85rem;backdrop-filter:blur(6px)}
+    /* LOVE BADGE — fixed, always on top, extra top space for mobile */
+    .love-badge{
+      position: fixed;
+      top: 20px;   /* daha fazla üst boşluk */
+      left: 12px;
+      background: #0b1220cc;
+      border: 1px solid #374151;
+      color: #e5e7eb;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: .85rem;
+      backdrop-filter: blur(6px);
+      z-index: 9999; /* her şeyin üstünde */
+    }
   </style>
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
 </head>
