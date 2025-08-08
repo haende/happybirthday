@@ -25,7 +25,7 @@
 </head>
 <body>
   <script>
-    // ===== Password (keep it) =====
+    // ===== Password =====
     const PASSWORD = 'ily'; // change if you want
     const entered = prompt('Enter password:');
     if (entered !== PASSWORD) {
@@ -93,23 +93,47 @@
 
       // Greeting: ONLY morning/evening/night (no midday greeting)
       let greetText = '';
-      if (h < 12) greetText = 'Good morning 🌞✨';
+      if (h < 12) greetText = 'Good morning ✨';
       else if (h >= 18 && h < 22) greetText = 'Good evening ✨';
       else if (h >= 22 || h < 4) greetText = 'Good night ✨';
       document.getElementById('greet').textContent = greetText;
 
-      // Special day: Aug 9 (Berlin) -> cat1 + message + confetti
+      // Special day: Aug 9 (Berlin) -> cat1 + message + confetti + Spotify
       if (d === 9 && m === 8) {
+        // special image + text
         setImgWithFallback('assets/cat1');
-        document.getElementById('quote').textContent = 'Happy Birthday Sunshine!🌞';
+        document.getElementById('quote').textContent = 'Happy Birthday Sunshine!';
+
+        // confetti
         const duration = 2000, end = Date.now() + duration;
         (function frame(){
           confetti({ particleCount: 8, spread: 70, origin: { y: 0.6 } });
           if (Date.now() < end) requestAnimationFrame(frame);
         })();
+
+        // --- Spotify embed (9 Aug only) ---
+        const SPOTIFY_TRACK_ID = '0CCdptVmysnKS6sSHRnLj4';
+        const spotifyBox = document.createElement('div');
+        spotifyBox.style.marginTop = '10px';
+        spotifyBox.innerHTML = `
+          <iframe style="border-radius:12px;width:100%;height:152px"
+            src="https://open.spotify.com/embed/track/${SPOTIFY_TRACK_ID}?utm_source=generator"
+            frameborder="0"
+            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+            loading="lazy"></iframe>
+          <div style="margin-top:8px;text-align:center">
+            <a href="spotify:track:${SPOTIFY_TRACK_ID}"
+               style="display:inline-block;padding:8px 12px;border:1px solid #374151;border-radius:10px;text-decoration:none;color:#e5e7eb;background:#0b1220">
+              Open in Spotify
+            </a>
+          </div>
+        `;
+        document.querySelector('.content').appendChild(spotifyBox);
+
       } else {
-        setImgWithFallback(pickForBlock(imageBases, 'img'));          // image salt
-        document.getElementById('quote').textContent = pickForBlock(quotes, 'quote'); // quote salt
+        // normal daily logic (3× per day, independent salts)
+        setImgWithFallback(pickForBlock(imageBases, 'img'));
+        document.getElementById('quote').textContent = pickForBlock(quotes, 'quote');
       }
 
       document.getElementById('dateBadge').textContent =
@@ -125,10 +149,11 @@
     }
 
     // Buttons
-    function randomItem(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
+    function randomItem(arr){ return Math.floor(Math.random()*arr.length); }
     document.getElementById('nextBtn').addEventListener('click', ()=>{
-      setImgWithFallback(randomItem(imageBases));
-      document.getElementById('quote').textContent = randomItem(quotes);
+      const idx = randomItem(imageBases);
+      setImgWithFallback(imageBases[idx]);
+      document.getElementById('quote').textContent = quotes[Math.floor(Math.random()*quotes.length)];
     });
     document.getElementById('copyBtn').addEventListener('click', async ()=>{
       const text = document.getElementById('quote').textContent;
@@ -141,4 +166,3 @@
   </script>
 </body>
 </html>
-
