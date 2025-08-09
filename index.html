@@ -37,15 +37,17 @@
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
 </head>
 <body>
-  <script>
-    // ===== Password =====
-    const PASSWORD = 'ily';
-    const entered = prompt('Enter password:');
-    if (entered !== PASSWORD) {
-      document.write('<h1 style="font-family:system-ui; color:#e5e7eb; text-align:center; margin-top:20vh;">Access denied</h1>');
-      throw new Error('Blocked');
-    }
-  </script>
+<script>
+  // ===== Password =====
+  const PASSWORD = 'ily';
+  const entered = prompt('Enter password:');
+
+  // Eğer parola yanlışsa veya boş/iptal edilirse erişim engellenir
+  if (entered === null || entered.trim() === '' || entered !== PASSWORD) {
+    document.body.innerHTML = '<h1 style="font-family:system-ui; color:#e5e7eb; text-align:center; margin-top:20vh;">Access denied</h1>';
+    throw new Error('Blocked');
+  }
+</script>
 
   <div class="love-badge"> I am grateful for the kindness I receive, for every small gesture that warms my heart and reminds me of the goodness in people. </div>
   <div class="card">
