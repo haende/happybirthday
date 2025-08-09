@@ -4,10 +4,41 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Daily Cat + Quote</title>
+
+  <!-- HARD LOCK: sayfa yüklenmeden parola kontrolü -->
+  <script>
+    (function () {
+      const PASSWORD = 'ily';
+      const entered = prompt('Enter password:');
+
+      const bad =
+        entered === null || typeof entered !== 'string' ||
+        entered.trim() === '' || entered !== PASSWORD;
+
+      if (bad) {
+        alert('Wrong password');
+        document.open();
+        document.write(
+          '<!doctype html><html><head><meta charset="utf-8"><title>Access denied</title>' +
+          '<style>html,body{height:100%;margin:0;font-family:system-ui;background:#000;color:#e5e7eb;display:grid;place-items:center}</style>' +
+          '</head><body><h1>Access denied</h1></body></html>'
+        );
+        document.close();
+        try { window.stop(); } catch (_) {}
+        throw new Error('Blocked');
+      } else {
+        document.documentElement.classList.add('auth-ok');
+      }
+    })();
+  </script>
+
   <style>
     :root{--bg:#000000;--card:#111827cc;--text:#e5e7eb;--muted:#9ca3af}
     html,body{height:100%}
-    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;display:grid;place-items:center;background:var(--bg);color:var(--text);padding:24px}
+    /* Başarılı girişe kadar body görünmesin */
+    body{display:none;margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;background:var(--bg);color:var(--text);padding:24px;place-items:center}
+    html.auth-ok body{display:grid}
+
     .card{background:var(--card);border:1px solid #1f2937;border-radius:16px;max-width:560px;width:100%;box-shadow:0 10px 30px #0006;overflow:hidden;position:relative}
     .imgbox{aspect-ratio:4/3;background:#0b1020;display:grid;place-items:center}
     .imgbox img{width:100%;height:100%;object-fit:cover}
@@ -19,37 +50,19 @@
     button{appearance:none;border:1px solid #374151;background:#0b1220;color:var(--text);padding:8px 12px;border-radius:10px;cursor:pointer;font-weight:600}
     button:hover{border-color:#4b5563}
     .small{font-size:.85rem;color:var(--muted)}
-    /* LOVE BADGE — fixed, always on top, extra top space for mobile */
     .love-badge{
-      position: fixed;
-      top: 20px;   /* daha fazla üst boşluk */
-      left: 12px;
-      background: #0b1220cc;
-      border: 1px solid #374151;
-      color: #e5e7eb;
-      padding: 6px 10px;
-      border-radius: 999px;
-      font-size: .85rem;
-      backdrop-filter: blur(6px);
-      z-index: 9999; /* her şeyin üstünde */
+      position: fixed; top:20px; left:12px;
+      background:#0b1220cc; border:1px solid #374151; color:#e5e7eb;
+      padding:6px 10px; border-radius:999px; font-size:.85rem;
+      backdrop-filter:blur(6px); z-index:9999;
     }
   </style>
+
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
 </head>
 <body>
-<script>
-  // ===== Password =====
-  const PASSWORD = 'ily';
-  const entered = prompt('Enter password:');
-
-  // Eğer parola yanlışsa veya boş/iptal edilirse erişim engellenir
-  if (entered === null || entered.trim() === '' || entered !== PASSWORD) {
-    document.body.innerHTML = '<h1 style="font-family:system-ui; color:#e5e7eb; text-align:center; margin-top:20vh;">Access denied</h1>';
-    throw new Error('Blocked');
-  }
-</script>
-
   <div class="love-badge"> I am grateful for the kindness I receive, for every small gesture that warms my heart and reminds me of the goodness in people. </div>
+
   <div class="card">
     <div class="imgbox"><img id="catImg" alt="Cat of the day" /></div>
     <div class="content">
@@ -87,7 +100,7 @@
       imgEl.onerror = () => { imgEl.onerror = null; imgEl.src = base + '.jpeg'; };
     }
 
-    // ===== Quotes (50 short + 15 long) =====
+    // ===== Quotes =====
     const quotes = [
       'I’m so lucky the universe made you.','My heart smiles whenever you do.','I never get tired of your smile.','You’re my favorite hello and my hardest goodbye.','Today is a fresh start — make it sparkle.','You’re stronger than you think.','Keep going, you’re doing amazing.','Small steps every day lead to big changes.','The sun will rise, and so will you.','Your energy is magnetic.','Good things are coming — trust the process.','You’ve got this, no matter what.','Progress, not perfection.','Stay soft, but stand strong.','You + me + cats = perfect equation.','I’m pawsitive you’re awesome.','Life’s better with whiskers and you.','Stay pawsitive, human.','You’re the cat’s meow.','Coffee first, conquering the world second.','You’re purrfect, and that’s a fact.','If you were a cat, I’d still choose you.','I knead you in my life.','You’re the treat at the end of my day.','Be the reason someone believes in kindness.','Even the moon needs the dark to shine.','You’re allowed to rest and still be worthy.','Let go of what you can’t control.','You are the art in someone’s gallery.','Make yourself proud today.','Chase dreams, not deadlines.','The best time for new beginnings is now.','You’re exactly where you’re meant to be.','Your light is never too much.','Drink water, eat cake, call me.','You make ordinary days magical.','Don’t forget to breathe and smile.','You’re my favorite notification.','You make everything feel lighter.','A day without you is like a day without cats — impossible.','You’re the plot twist I didn’t know I needed.','Keep your heart open, magic is on the way.','You’re proof that good people exist.','I’m proud of you, always.',
       'No matter how slow you go, you are still lapping everyone who stays on the couch. Keep showing up for yourself.','Every single day is a blank page. Write something worth reading, even if it’s just a small act of kindness.','You survived the days you thought you couldn’t. You’re stronger than every storm you’ve been through.','Sometimes, the bravest thing you can do is rest, heal, and try again tomorrow.','You are not behind in life. You are exactly where your path needs you to be, even if it doesn’t look like anyone else’s.','Small joys matter — the smell of coffee, the sound of laughter, the warmth of someone who loves you.','Every challenge you face is shaping you into the person you’ve always wanted to become.','Your worth is not measured by productivity. You are enough simply by existing.','One day, you’ll look back and realize that all the little steps were actually the big ones.','Be gentle with yourself. Growth is messy, healing is not linear, and love takes time.','The world is better because you are in it — your light reaches further than you know.','Don’t rush the process. Good things take time, and you’re building something beautiful.','Your dreams are valid, even if they scare you. Especially if they scare you.','Remember: the same sun that melts ice hardens clay. How you respond is up to you.','There is no such thing as “too late.” The next chapter can start right now.'
@@ -106,27 +119,21 @@
     function setToday(){
       const {m,d,h} = getBerlinParts();
 
-      // Greeting: ONLY morning/evening/night (no midday greeting)
       let greetText = '';
       if (h < 12) greetText = 'Good morning ✨';
       else if (h >= 18 && h < 22) greetText = 'Good evening ✨';
       else if (h >= 22 || h < 4) greetText = 'Good night ✨';
       document.getElementById('greet').textContent = greetText;
 
-      // Special day: Aug 9 (Berlin) -> cat1 + message + confetti + Spotify
       if (d === 9 && m === 8) {
-        // special image + text
         setImgWithFallback('assets/cat1');
         document.getElementById('quote').textContent = 'Happy Birthday Sunshine!';
-
-        // confetti
         const duration = 2000, end = Date.now() + duration;
         (function frame(){
           confetti({ particleCount: 8, spread: 70, origin: { y: 0.6 } });
           if (Date.now() < end) requestAnimationFrame(frame);
         })();
 
-        // --- Spotify embed (9 Aug only) ---
         const SPOTIFY_TRACK_ID = '0CCdptVmysnKS6sSHRnLj4';
         const spotifyBox = document.createElement('div');
         spotifyBox.style.marginTop = '10px';
@@ -144,9 +151,7 @@
           </div>
         `;
         document.querySelector('.content').appendChild(spotifyBox);
-
       } else {
-        // normal daily logic (3× per day, independent salts)
         setImgWithFallback(pickForBlock(imageBases, 'img'));
         document.getElementById('quote').textContent = pickForBlock(quotes, 'quote');
       }
@@ -155,7 +160,7 @@
         new Date().toLocaleDateString('en-US', {weekday:'long', year:'numeric', month:'long', day:'numeric'});
     }
 
-    // ===== Auto-refresh at next block (12:00, 18:00, 24:00 Berlin) =====
+    // ===== Auto-refresh at next block =====
     function scheduleRefresh(){
       const {h,min,sec} = getBerlinParts();
       const nextH = h < 12 ? 12 : (h < 18 ? 18 : 24);
@@ -181,3 +186,4 @@
   </script>
 </body>
 </html>
+
