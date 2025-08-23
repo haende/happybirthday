@@ -151,6 +151,30 @@
           </div>
         `;
         document.querySelector('.content').appendChild(spotifyBox);
+         else if ((d === 23 && m === 8) || (d === 24 && m === 8)) {
+    const specialCats = ['assets/cat82','assets/cat83','assets/cat84','assets/cat85','assets/cat86'];
+    if (!window._specialCatUsed) {
+      setImgWithFallback('assets/cat82');
+      window._specialCatUsed = true;
+    } else {
+      const idx = Math.floor(Math.random() * specialCats.length);
+      setImgWithFallback(specialCats[idx]);
+    }
+    document.getElementById('quote').textContent = pickForBlock(quotes, 'quote');
+
+    // spotify embed
+    const spotifyBox = document.createElement('div');
+    spotifyBox.style.marginTop = '10px';
+    spotifyBox.innerHTML = `
+      <iframe data-testid="embed-iframe" style="border-radius:12px"
+        src="https://open.spotify.com/embed/track/1aFi6Qx3dlyc7bCf9Cd7H7?utm_source=generator"
+        width="100%" height="352" frameBorder="0"
+        allowfullscreen=""
+        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+        loading="lazy"></iframe>
+    `;
+    document.querySelector('.content').appendChild(spotifyBox);
+  } 
       } else {
         setImgWithFallback(pickForBlock(imageBases, 'img'));
         document.getElementById('quote').textContent = pickForBlock(quotes, 'quote');
