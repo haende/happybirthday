@@ -47,7 +47,7 @@
     .quote{font-size:1.15rem;line-height:1.5;margin:10px 0}
     .date{font-size:.9rem;color:var(--muted)}
     .row{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
-    button{appearance:none;border:1px solid #374151;background:#0b1220;color:var(--text);padding:8px 12px;border-radius:10px;cursor:pointer;font-weight:600}
+    button{appearance:none;border:1px solid #374151;background:#0b1220;color:#e5e7eb;padding:8px 12px;border-radius:10px;cursor:pointer;font-weight:600}
     button:hover{border-color:#4b5563}
     .small{font-size:.85rem;color:var(--muted)}
     .love-badge{
@@ -151,31 +151,33 @@
           </div>
         `;
         document.querySelector('.content').appendChild(spotifyBox);
-         else if ((d === 23 && m === 8) || (d === 24 && m === 8)) {
-    const specialCats = ['assets/cat82','assets/cat83','assets/cat84','assets/cat85','assets/cat86'];
-    if (!window._specialCatUsed) {
-      setImgWithFallback('assets/cat82');
-      window._specialCatUsed = true;
-    } else {
-      const idx = Math.floor(Math.random() * specialCats.length);
-      setImgWithFallback(specialCats[idx]);
-    }
-    document.getElementById('quote').textContent = pickForBlock(quotes, 'quote');
+      }
+      else if ((d === 23 && m === 8) || (d === 24 && m === 8)) {
+        const specialCats = ['assets/cat82','assets/cat83','assets/cat84','assets/cat85','assets/cat86'];
 
-    // spotify embed
-    const spotifyBox = document.createElement('div');
-    spotifyBox.style.marginTop = '10px';
-    spotifyBox.innerHTML = `
-      <iframe data-testid="embed-iframe" style="border-radius:12px"
-        src="https://open.spotify.com/embed/track/1aFi6Qx3dlyc7bCf9Cd7H7?utm_source=generator"
-        width="100%" height="352" frameBorder="0"
-        allowfullscreen=""
-        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-        loading="lazy"></iframe>
-    `;
-    document.querySelector('.content').appendChild(spotifyBox);
-  } 
-      } else {
+        if (!window._specialCatUsed) {
+          setImgWithFallback('assets/cat82');
+          window._specialCatUsed = true;
+        } else {
+          const idx = Math.floor(Math.random() * specialCats.length);
+          setImgWithFallback(specialCats[idx]);
+        }
+
+        document.getElementById('quote').textContent = pickForBlock(quotes, 'quote');
+
+        const spotifyBox2 = document.createElement('div');
+        spotifyBox2.style.marginTop = '10px';
+        spotifyBox2.innerHTML = `
+          <iframe data-testid="embed-iframe" style="border-radius:12px"
+            src="https://open.spotify.com/embed/track/1aFi6Qx3dlyc7bCf9Cd7H7?utm_source=generator"
+            width="100%" height="352" frameBorder="0"
+            allowfullscreen=""
+            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+            loading="lazy"></iframe>
+        `;
+        document.querySelector('.content').appendChild(spotifyBox2);
+      }
+      else {
         setImgWithFallback(pickForBlock(imageBases, 'img'));
         document.getElementById('quote').textContent = pickForBlock(quotes, 'quote');
       }
@@ -210,4 +212,3 @@
   </script>
 </body>
 </html>
-
