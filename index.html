@@ -96,7 +96,7 @@
     }
 
     // ===== Images (.jpg/.jpeg fallback) =====
-    const IMAGE_COUNT = 89; // assets/cat1..cat89
+    const IMAGE_COUNT = 90; // assets/cat1..cat90
     const imageBases = Array.from({length: IMAGE_COUNT}, (_, i) => `assets/cat${i+1}`);
     function setImgWithFallback(base){
       const imgEl = document.getElementById('catImg');
@@ -120,22 +120,17 @@
       return list[ hashStr(key) % list.length ];
     }
     // ===== Forced rotation for new cats (Berlin date based) =====
-    function getForcedCatForToday(){
-      const {y,m,d} = getBerlinParts();
-      const key = `${y}-${m}-${d}`;
+function getForcedCatForToday(){
+  const {y,m,d} = getBerlinParts();
+  const key = `${y}-${m}-${d}`;
 
-      // Berlin date keys
-      const forced = {
-        // TODAY (Berlin): cat88
-        '2026-2-24': 'assets/cat88',
+  // BUGÜNÜN tarihini buraya yaz
+  const forced = {
+    '2026-2-27': 'assets/cat90'
+  };
 
-        // Optional "sirayla" continuation:
-        '2026-2-25': 'assets/cat86',
-        '2026-2-26': 'assets/cat87',
-      };
-
-      return forced[key] || null;
-    }
+  return forced[key] || null;
+}
     // ===== Set content =====
     function setToday(){
       const {m,d,h} = getBerlinParts();
